@@ -1,5 +1,6 @@
 package com.shivaprasad;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,5 +53,67 @@ public class StreamAPIPart1 {
         //Who has the most working experience in the organization?
         Optional<Employee> empMostExp =  employeeList.stream().collect(Collectors.minBy(Comparator.comparingInt(Employee::getEmp_doj)));
         System.out.println("Most exp emp: " +empMostExp);
+
+
+        //Question-6
+        //Find the second highest salary employee details //DESC
+        Employee secondHighestSalary = employeeList.stream().sorted(Comparator.comparingDouble(Employee::getEmp_salary).reversed()).skip(1).findFirst().orElse(null);
+        System.out.println("Second highest salary employee: " +secondHighestSalary);
+
+        //Question - 7
+        //Get the maximum salary of an employee from each department
+       Map<String, Optional<Employee>> maxSalaryByDept = employeeList.stream().collect(Collectors.groupingBy(Employee::getEmp_dept, Collectors.maxBy(Comparator.comparingDouble(Employee::getEmp_salary))));
+       System.out.println("Max salary by dept: " + maxSalaryByDept);
+
+
+        //Question-8
+       //Get the employees count working in each department
+        Map<String, Long> employeesInEachDept = employeeList.stream().collect(Collectors.groupingBy(Employee::getEmp_dept, Collectors.counting()));
+        System.out.println("Employees in each dept: " + employeesInEachDept);
+
+        //Question-9
+        //What is the average salary and total salary of the whole organization
+        //Avg : Sum of all employees salary / number of employees
+        //Total : Sum of all employees salary
+
+        DoubleSummaryStatistics statistics = employeeList.stream().collect(Collectors.summarizingDouble(Employee::getEmp_salary));
+        System.out.println("Average salary of Organization salary: " + statistics.getAverage());
+        System.out.println("Total salary of Organization salary: " + statistics.getSum());
+
+        //Question-10
+        //Separate the employees who are younger or equal to 25 years from those employees who are older than 25 years
+        Map<Boolean, List<Employee>> partitionedEmployees  = employeeList.stream().collect(Collectors.partitioningBy(e -> e.getEmp_age() > 25));
+        System.out.println("Partitioned employees based on age: " + partitionedEmployees);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
